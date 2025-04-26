@@ -23,7 +23,6 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
   disableApplicationMarkers();
   colorSwirlBoundVars();
   await animateBoundVariableReplacements();
-  collapseSpaceFromSecondTerm();
   await reduceTheHead();
 
   async function flashFirstTwoTerms() {
@@ -92,11 +91,20 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
 
     await wait(1000);
 
+    collapseSpaceFromSecondTerm();
+
     animatedSecondTermClone.style.opacity = "0";
 
     // fnBoundVar.appendChild(secondTermClone);
     fnBoundVar.classList.add("bound-var-shake");
     await wait(1000);
+
+    secondTermScaffold.remove();
+  }
+
+  function collapseSpaceFromSecondTerm() {
+    secondTermScaffold.style.width = secondTermScaffold.style.maxWidth = "0px";
+    secondTermScaffold.style.margin = "0em 0em";
   }
 
   function colorSwirlBoundVars() {
@@ -150,11 +158,26 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
       secondTermClone.style.top = `${boundvarRect.top}px`;
 
       await wait(1000);
-      secondTermClone.style.position = "static";
-      const termElement = document.createElement("span");
-      termElement.classList.add("term");
-      termElement.append(...Array.from(secondTermClone.children));
-      box.replaceWith(termElement);
+      // secondTermClone.style.position = "static";
+      // const termElement = document.createElement("span");
+      // termElement.classList.add("term");
+      // termElement.append(...Array.from(secondTermClone.children));
+      secondTermClone.remove();
+      // box.replaceWith(...Array.from(secondTermClone.children));
+      // firstTerm.replaceChildren(box, ...Array.from(secondTermClone.children));
+      const tkns = Array.from(firstTerm.children);
+      const indexOfBox = tkns.findIndex((el) => el === box);
+      // firstTerm.children[indexOfBox].replaceWith(box);
+      firstTerm.replaceChildren(
+        ...[
+          ...tkns.slice(0, indexOfBox),
+          ...secondTermClone.children,
+          ...tkns.slice(indexOfBox + 1),
+        ].map((el) => {
+          (el as HTMLElement).style.margin = "";
+          return el;
+        })
+      );
     }
   }
 
@@ -175,7 +198,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
     tokenElementsToRemove.forEach((el) => {
       el.classList.add("head-token-fade-out");
     });
-    await wait(1000);
+    await wait(500);
     const boxes = tokenElementsToRemove.map((tokenElement) => {
       const box = document.createElement("span");
       box.classList.add("term-box");
@@ -195,10 +218,6 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
     boxes.forEach((box) => {
       box.remove();
     });
-  }
-
-  function collapseSpaceFromSecondTerm() {
-    secondTermScaffold.style.width = secondTermScaffold.style.maxWidth = "0px";
-    secondTermScaffold.style.margin = "0em 0em";
+    animatedSecondTermClone.remove();
   }
 }
