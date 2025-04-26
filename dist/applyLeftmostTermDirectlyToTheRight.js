@@ -15,8 +15,8 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
     await animateArgumentIntoBoundVariable();
     disableApplicationMarkers();
     colorSwirlBoundVars();
-    await animateBoundVariableReplacement();
-    await removeTheHead();
+    await animateBoundVariableReplacements();
+    await reduceTheHead();
     async function flashFirstTwoTerms() {
         // Flash the first two terms to show the application `A B`
         firstTerm.classList.add("term-pulse");
@@ -81,9 +81,8 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
             el.classList.add("color-swirl");
         });
     }
-    async function animateBoundVariableReplacement() {
+    async function animateBoundVariableReplacements() {
         for (const boundvar of boundvarsOfFirstTerm) {
-            console.log("yo");
             const secondTermClone = animatedSecondTermClone.cloneNode(true);
             const boundvarRect = boundvar.getBoundingClientRect();
             // Boundvar needs to make room (or shrink, possibly) for the argument.
@@ -115,7 +114,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
             // Move the argument clone into the target bound variable
             secondTermClone.style.left = `${boundvarRect.left - argWidth / 2 + boundvarRect.width / 2}px`;
             secondTermClone.style.top = `${boundvarRect.top}px`;
-            await wait(1500);
+            await wait(1000);
             secondTermClone.style.position = "static";
             const termElement = document.createElement("span");
             termElement.classList.add("term");
@@ -123,12 +122,37 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
             box.replaceWith(termElement);
         }
     }
-    async function removeTheHead() {
+    async function reduceTheHead() {
         const indexOfDot = Array.from(firstTerm.children).findIndex((el) => el.classList.contains("dot"));
-        console.log({ indexOfDot });
-        const tokensElementsToRemove = [...firstTerm.children].slice(1, indexOfDot + 1);
-        tokensElementsToRemove.forEach((el) => {
+        const headTokenElements = [...firstTerm.children].slice(1, indexOfDot + 1);
+        const nVars = headTokenElements.filter((el) => el.classList.contains("var")).length;
+        console.log({ nVars });
+        const tokenElementsToRemove = (nVars === 1
+            ? headTokenElements.slice(0, indexOfDot + 1)
+            : [headTokenElements[1]]);
+        tokenElementsToRemove.forEach((el) => {
             el.classList.add("head-token-fade-out");
+        });
+        await wait(1000);
+        const boxes = tokenElementsToRemove.map((tokenElement) => {
+            const box = document.createElement("span");
+            box.classList.add("term-box");
+            // box.classList.add("var"); // So sibling margin can be preserved
+            box.style.overflow = "hidden";
+            box.style.width = box.style.maxWidth = `${Math.round(tokenElement.getBoundingClientRect().width)}px`;
+            console.log(box.style.maxWidth);
+            tokenElement.replaceWith(box);
+            return box;
+        });
+        await wait(1000);
+        // Shrink the boxes
+        tokenElementsToRemove.forEach((box) => {
+            box.style.maxWidth = "0px";
+        });
+        await wait(1000);
+        // await wait(1500);
+        boxes.forEach((box) => {
+            box.remove();
         });
     }
 }
