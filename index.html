@@ -89,11 +89,28 @@
       .r-paren + .lambda {
         margin-left: 0.25em;
       }
-      .r-paren + .term-box {
-        margin-right: 0.5em;
-      }
-      .term-box + .l-paren {
+      .r-paren + .term-box,
+      .r-paren + .term {
         margin-left: 0.5em;
+      }
+      .term-box + .r-paren,
+      .term + .r-paren {
+        margin-left: -0.25em;
+      }
+
+      .head-token-fade-out {
+        opacity: 0;
+        transition: opacity 1s ease-out;
+        animation: spazz-out 0.1s linear infinite;
+      }
+
+      @keyframes spazz-out {
+        from {
+          color: white;
+        }
+        to {
+          color: black;
+        }
       }
 
       @keyframes color-swirl {

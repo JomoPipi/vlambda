@@ -2,8 +2,8 @@ import { wait } from "./constants.js";
 import { getAllBoundVariableInstances } from "./getAllBoundVariableInstances.js";
 
 export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
-  const terms = exp.children as HTMLCollectionOf<HTMLElement>;
-  const [firstTerm, secondTerm] = terms;
+  const termElements = exp.children as HTMLCollectionOf<HTMLElement>;
+  const [firstTerm, secondTerm] = termElements;
   const fnBoundVar = firstTerm.children[2] as HTMLElement;
   const secondTermRect = secondTerm.getBoundingClientRect();
   const boundvarsOfFirstTerm = getAllBoundVariableInstances(firstTerm);
@@ -22,6 +22,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
   disableApplicationMarkers();
   colorSwirlBoundVars();
   await animateBoundVariableReplacement();
+  await removeTheHead();
 
   async function flashFirstTwoTerms() {
     // Flash the first two terms to show the application `A B`
@@ -140,7 +141,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
       secondTermClone.style.top = `${boundvarRect.top + 30}px`;
       secondTermClone.style.opacity = "1";
       box.style.opacity = "0"; // Start making the bound variable fade out
-      await wait(500);
+      await wait(1000);
 
       // Move the argument clone into the target bound variable
       secondTermClone.style.left = `${
@@ -148,17 +149,26 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
       }px`;
       secondTermClone.style.top = `${boundvarRect.top}px`;
 
-      await wait(1000);
+      await wait(1500);
       secondTermClone.style.position = "static";
-      // secondTermClone.style.left
-      // secondTermClone.style.margin = "unset"; // Let it default back to the class's value
       const termElement = document.createElement("span");
       termElement.classList.add("term");
       termElement.append(...Array.from(secondTermClone.children));
       box.replaceWith(termElement);
-      // boundvar.replaceWith(secondTermClone);
-      // boundvar.replaceWith(secondTermClone);
-      // return;
     }
+  }
+
+  async function removeTheHead() {
+    const indexOfDot = Array.from(firstTerm.children).findIndex((el) =>
+      el.classList.contains("dot")
+    );
+    console.log({ indexOfDot });
+    const tokensElementsToRemove = [...firstTerm.children].slice(
+      1,
+      indexOfDot + 1
+    );
+    tokensElementsToRemove.forEach((el) => {
+      el.classList.add("head-token-fade-out");
+    });
   }
 }
