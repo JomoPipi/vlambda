@@ -8,7 +8,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
     const boundvarsOfFirstTerm = getAllBoundVariableInstances(firstTerm);
     const argWidth = secondTermRect.width;
     const secondTermScaffold = document.createElement("span");
-    // await flashFirstTwoTerms();
+    await flashFirstTwoTerms();
     enableApplicationMarkers();
     const animatedSecondTermClone = duplicateSecondTerm();
     // Smoothy lift the second term clone while shrinking the hidden second term

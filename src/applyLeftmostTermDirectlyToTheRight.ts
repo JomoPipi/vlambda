@@ -10,7 +10,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
   const argWidth = secondTermRect.width;
   const secondTermScaffold = document.createElement("span");
 
-  // await flashFirstTwoTerms();
+  await flashFirstTwoTerms();
 
   enableApplicationMarkers();
 

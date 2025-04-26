@@ -21,9 +21,12 @@ function tokenTypeClass(token: string) {
 export function createExpressionElement(exp: string) {
   const expressionElement = document.createElement("div");
   expressionElement.classList.add("expression");
-  const termElements = getTerms(exp).map((term) => {
+  const terms = getTerms(exp);
+  const nTerms = terms.length;
+  const termElements = terms.map((term) => {
     const termElement = document.createElement("span");
-    for (const token of tokenize(`(${term})`)) {
+    const tokens = tokenize(nTerms === 1 ? term : `(${term})`);
+    for (const token of tokens) {
       const tokenElement = document.createElement("span");
       tokenElement.innerText = token;
       tokenElement.classList.add("token");
