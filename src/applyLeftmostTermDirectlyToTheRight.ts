@@ -165,7 +165,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
     const nVars = headTokenElements.filter((el) =>
       el.classList.contains("var")
     ).length;
-    console.log({ nVars });
+
     const tokenElementsToRemove = (
       nVars === 1
         ? headTokenElements.slice(0, indexOfDot + 1)
@@ -178,25 +178,23 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
     const boxes = tokenElementsToRemove.map((tokenElement) => {
       const box = document.createElement("span");
       box.classList.add("term-box");
-      // box.classList.add("var"); // So sibling margin can be preserved
-      box.style.overflow = "hidden";
-      box.style.width = box.style.maxWidth = `${Math.round(
+      box.style.width = box.style.maxWidth = `${
         tokenElement.getBoundingClientRect().width
-      )}px`;
-      console.log(box.style.maxWidth);
+      }px`;
       tokenElement.replaceWith(box);
       return box;
     });
     await wait(1000);
     // Shrink the boxes
-    tokenElementsToRemove.forEach((box) => {
-      box.style.maxWidth = "0px";
+    boxes.forEach((box) => {
+      box.style.width = box.style.maxWidth = "0px";
+      box.style.margin = "0em 0em 0em 0.25em";
     });
 
     await wait(1000);
     // await wait(1500);
-    boxes.forEach((box) => {
-      box.remove();
-    });
+    // boxes.forEach((box) => {
+    //   box.remove();
+    // });
   }
 }

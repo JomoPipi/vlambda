@@ -20,6 +20,7 @@ function tokenTypeClass(token: string) {
 
 export function createExpressionElement(exp: string) {
   const expressionElement = document.createElement("div");
+  expressionElement.classList.add("expression");
   const termElements = getTerms(exp).map((term) => {
     const termElement = document.createElement("span");
     for (const token of tokenize(`(${term})`)) {
