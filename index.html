@@ -60,6 +60,23 @@
       .bound-var-shake {
         animation: shake 0.15s linear infinite;
       }
+      .color-swirl {
+        background-image: linear-gradient(
+          45deg,
+          #ff9696,
+          #ffd1ab,
+          #aeffae,
+          #a4ffff,
+          #ffa5ff,
+          #ff9696
+        );
+        background-size: 500% 500%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: none;
+        animation: color-swirl 3s linear infinite;
+      }
 
       .lambda + .var,
       .var + .dot,
@@ -75,6 +92,24 @@
       }
       .term-box + .l-paren {
         margin-left: 0.5em;
+      }
+
+      @keyframes color-swirl {
+        0% {
+          background-position: 0% 500%;
+        }
+        /* 25% {
+          background-position: 100% 0%;
+        }
+        50% {
+          background-position: 100% 100%;
+        }
+        75% {
+          background-position: 0% 0%;
+        } */
+        100% {
+          background-position: 0% 0%;
+        }
       }
 
       @keyframes pulse {

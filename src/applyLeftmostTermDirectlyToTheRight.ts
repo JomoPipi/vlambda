@@ -1,10 +1,12 @@
 import { wait } from "./constants.js";
+import { getAllBoundVariableInstances } from "./getAllBoundVariableInstances.js";
 
 export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
   const terms = exp.children as HTMLCollectionOf<HTMLElement>;
   const [firstTerm, secondTerm] = terms;
   const fnBoundVar = firstTerm.children[2] as HTMLElement;
   const secondTermRect = secondTerm.getBoundingClientRect();
+  const boundvarsOfFirstTerm = getAllBoundVariableInstances(firstTerm);
 
   await flashFirstTwoTerms();
 
@@ -15,8 +17,9 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
 
   const fnBoundVarRect = fnBoundVar.getBoundingClientRect();
 
-  moveArgumentIntoBoundVariable();
+  await moveArgumentIntoBoundVariable();
   disableApplicationMarkers();
+  colorSwirlBoundVars();
 
   async function flashFirstTwoTerms() {
     // Flash the first two terms to show the application `A B`
@@ -91,5 +94,12 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
 
     // fnBoundVar.appendChild(secondTermClone);
     fnBoundVar.classList.add("bound-var-shake");
+    await wait(1000);
+  }
+
+  function colorSwirlBoundVars() {
+    boundvarsOfFirstTerm.forEach((el) => {
+      el.classList.add("color-swirl");
+    });
   }
 }

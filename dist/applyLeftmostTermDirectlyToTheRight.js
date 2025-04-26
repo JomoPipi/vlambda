@@ -1,16 +1,19 @@
 import { wait } from "./constants.js";
+import { getAllBoundVariableInstances } from "./getAllBoundVariableInstances.js";
 export async function applyLeftmostTermDirectlyToTheRight(exp) {
     const terms = exp.children;
     const [firstTerm, secondTerm] = terms;
     const fnBoundVar = firstTerm.children[2];
     const secondTermRect = secondTerm.getBoundingClientRect();
+    const boundvarsOfFirstTerm = getAllBoundVariableInstances(firstTerm);
     await flashFirstTwoTerms();
     enableApplicationMarkers();
     const secondTermClone = duplicateSecondTerm();
     // Smoothy lift the second term clone while shrinking the hidden second term
     const fnBoundVarRect = fnBoundVar.getBoundingClientRect();
-    moveArgumentIntoBoundVariable();
+    await moveArgumentIntoBoundVariable();
     disableApplicationMarkers();
+    colorSwirlBoundVars();
     async function flashFirstTwoTerms() {
         // Flash the first two terms to show the application `A B`
         firstTerm.classList.add("term-pulse");
@@ -69,6 +72,12 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
         secondTermClone.style.opacity = "0";
         // fnBoundVar.appendChild(secondTermClone);
         fnBoundVar.classList.add("bound-var-shake");
+        await wait(1000);
+    }
+    function colorSwirlBoundVars() {
+        boundvarsOfFirstTerm.forEach((el) => {
+            el.classList.add("color-swirl");
+        });
     }
 }
 //# sourceMappingURL=applyLeftmostTermDirectlyToTheRight.js.map
