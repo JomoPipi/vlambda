@@ -1,0 +1,16 @@
+{
+  "name": "vlambda",
+  "version": "1.0.0",
+  "description": "TypeScript project",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "serve ."
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "serve": "^14.2.1"
+  },
+  "type": "module"
+}
