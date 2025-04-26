@@ -129,7 +129,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
       await wait(500); // Allow some time for animation stuff
       // Grow the box to the size of the argument
       box.style.width = box.style.maxWidth = `${argWidth}px`;
-      await wait(1000);
+      await wait(500);
 
       // Initialize the argument clone
       exp.appendChild(secondTermClone);
@@ -149,7 +149,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
       secondTermClone.style.top = `${boundvarRect.top + 30}px`;
       secondTermClone.style.opacity = "1";
       box.style.opacity = "0"; // Start making the bound variable fade out
-      await wait(1000);
+      await wait(500);
 
       // Move the argument clone into the target bound variable
       secondTermClone.style.left = `${
@@ -157,7 +157,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
       }px`;
       secondTermClone.style.top = `${boundvarRect.top}px`;
 
-      await wait(1000);
+      await wait(500);
       // secondTermClone.style.position = "static";
       // const termElement = document.createElement("span");
       // termElement.classList.add("term");
@@ -198,7 +198,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
     tokenElementsToRemove.forEach((el) => {
       el.classList.add("head-token-fade-out");
     });
-    await wait(500);
+    await wait(1000);
     const boxes = tokenElementsToRemove.map((tokenElement) => {
       const box = document.createElement("span");
       box.classList.add("term-box");
@@ -214,7 +214,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
       box.style.width = box.style.maxWidth = "0px";
       box.style.margin = "0em 0em 0em 0.25em";
     });
-    await wait(1000);
+    await wait(500);
     boxes.forEach((box) => {
       box.remove();
     });
