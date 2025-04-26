@@ -8,6 +8,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
   const secondTermRect = secondTerm.getBoundingClientRect();
   const boundvarsOfFirstTerm = getAllBoundVariableInstances(firstTerm);
   const argWidth = secondTermRect.width;
+  const secondTermScaffold = document.createElement("span");
 
   // await flashFirstTwoTerms();
 
@@ -22,6 +23,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
   disableApplicationMarkers();
   colorSwirlBoundVars();
   await animateBoundVariableReplacements();
+  collapseSpaceFromSecondTerm();
   await reduceTheHead();
 
   async function flashFirstTwoTerms() {
@@ -49,15 +51,14 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
   function duplicateSecondTerm() {
     // Next: duplicate the second term, make the original term disappear (with transparency), and make the duplicate term "float" into the bound variable of the first term
     const secondTermClone = secondTerm.cloneNode(true) as HTMLElement;
-    const box = document.createElement("span");
-    box.style.width =
-      box.style.maxWidth =
+    secondTermScaffold.style.width =
+      secondTermScaffold.style.maxWidth =
       secondTermClone.style.maxWidth =
         `${argWidth}px`;
 
     // box.style.border = "1px solid green";
-    box.classList.add("term-box");
-    secondTerm.replaceWith(box);
+    secondTermScaffold.classList.add("term-box");
+    secondTerm.replaceWith(secondTermScaffold);
     exp.appendChild(secondTermClone);
     secondTermClone.classList.add("term-clone");
     // Instead of compensating for the double margin, we can remove the margin
@@ -190,11 +191,14 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
       box.style.width = box.style.maxWidth = "0px";
       box.style.margin = "0em 0em 0em 0.25em";
     });
-
     await wait(1000);
-    // await wait(1500);
-    // boxes.forEach((box) => {
-    //   box.remove();
-    // });
+    boxes.forEach((box) => {
+      box.remove();
+    });
+  }
+
+  function collapseSpaceFromSecondTerm() {
+    secondTermScaffold.style.width = secondTermScaffold.style.maxWidth = "0px";
+    secondTermScaffold.style.margin = "0em 0em";
   }
 }
