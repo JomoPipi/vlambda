@@ -6,14 +6,15 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
     const fnBoundVar = firstTerm.children[2];
     const secondTermRect = secondTerm.getBoundingClientRect();
     const boundvarsOfFirstTerm = getAllBoundVariableInstances(firstTerm);
-    await flashFirstTwoTerms();
+    // await flashFirstTwoTerms();
     enableApplicationMarkers();
-    const secondTermClone = duplicateSecondTerm();
+    const animatedSecondTermClone = duplicateSecondTerm();
     // Smoothy lift the second term clone while shrinking the hidden second term
     const fnBoundVarRect = fnBoundVar.getBoundingClientRect();
-    await moveArgumentIntoBoundVariable();
+    await animateArgumentIntoBoundVariable();
     disableApplicationMarkers();
     colorSwirlBoundVars();
+    await animateBoundVariableReplacement();
     async function flashFirstTwoTerms() {
         // Flash the first two terms to show the application `A B`
         firstTerm.classList.add("term-pulse");
@@ -54,22 +55,22 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
         secondTermClone.style.margin = "0"; // Remove margins from clone to prevent
         return secondTermClone;
     }
-    async function moveArgumentIntoBoundVariable() {
+    async function animateArgumentIntoBoundVariable() {
         // shrink the box later (after the replacement)
         // box.style.maxWidth = "0px";
         // secondTermClone.classList.add("term-lift");
-        secondTermClone.style.top = `${fnBoundVarRect.top - 30}px`;
+        animatedSecondTermClone.style.top = `${fnBoundVarRect.top - 30}px`;
         // Move the argument into the bound variable
         // Get the location of the bound variable
         await wait(700);
-        secondTermClone.style.left = `${fnBoundVarRect.left - secondTermRect.width / 2}px`;
+        animatedSecondTermClone.style.left = `${fnBoundVarRect.left - secondTermRect.width / 2}px`;
         await wait(900);
-        secondTermClone.style.top = `${fnBoundVarRect.top}px`;
-        secondTermClone.style.left = `${fnBoundVarRect.left}px`;
-        secondTermClone.style.transform = "scale(0.1)";
-        secondTermClone.style.maxWidth = `${fnBoundVarRect.width}px`;
+        animatedSecondTermClone.style.top = `${fnBoundVarRect.top}px`;
+        animatedSecondTermClone.style.left = `${fnBoundVarRect.left}px`;
+        animatedSecondTermClone.style.transform = "scale(0.1)";
+        animatedSecondTermClone.style.maxWidth = `${fnBoundVarRect.width}px`;
         await wait(1000);
-        secondTermClone.style.opacity = "0";
+        animatedSecondTermClone.style.opacity = "0";
         // fnBoundVar.appendChild(secondTermClone);
         fnBoundVar.classList.add("bound-var-shake");
         await wait(1000);
@@ -78,6 +79,24 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
         boundvarsOfFirstTerm.forEach((el) => {
             el.classList.add("color-swirl");
         });
+    }
+    async function animateBoundVariableReplacement() {
+        for (const boundvar of boundvarsOfFirstTerm) {
+            const secondTermClone = animatedSecondTermClone.cloneNode(true);
+            const boundvarRect = boundvar.getBoundingClientRect();
+            exp.appendChild(secondTermClone);
+            secondTermClone.style.opacity = "1";
+            secondTermClone.style.transform = "scale(0.01)";
+            secondTermClone.classList.remove("term-pulse-2");
+            await wait(1000);
+            secondTermClone.style.transform = "scale(1)";
+            secondTermClone.style.maxWidth = `${secondTermRect.width}px`;
+            secondTermClone.style.left = `${boundvarRect.left}px`;
+            secondTermClone.style.top = `${boundvarRect.top}px`;
+            // boundvar.replaceWith(secondTermClone);
+            // Boundvar needs to make room (or shrink, possibly) for the argument
+            return;
+        }
     }
 }
 //# sourceMappingURL=applyLeftmostTermDirectlyToTheRight.js.map
