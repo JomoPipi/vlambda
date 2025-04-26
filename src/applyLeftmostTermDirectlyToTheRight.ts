@@ -7,6 +7,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
   const fnBoundVar = firstTerm.children[2] as HTMLElement;
   const secondTermRect = secondTerm.getBoundingClientRect();
   const boundvarsOfFirstTerm = getAllBoundVariableInstances(firstTerm);
+  const argWidth = secondTermRect.width;
 
   // await flashFirstTwoTerms();
 
@@ -51,9 +52,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
     box.style.width =
       box.style.maxWidth =
       secondTermClone.style.maxWidth =
-        `${secondTermRect.width}px`;
-
-    secondTermClone.style.maxHeight = `${secondTermRect.height}px`;
+        `${argWidth}px`;
 
     // box.style.border = "1px solid green";
     box.classList.add("term-box");
@@ -79,7 +78,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
     await wait(700);
 
     animatedSecondTermClone.style.left = `${
-      fnBoundVarRect.left - secondTermRect.width / 2
+      fnBoundVarRect.left - argWidth / 2
     }px`;
 
     await wait(900);
@@ -106,22 +105,60 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
 
   async function animateBoundVariableReplacement() {
     for (const boundvar of boundvarsOfFirstTerm) {
+      console.log("yo");
       const secondTermClone = animatedSecondTermClone.cloneNode(
         true
       ) as HTMLElement;
       const boundvarRect = boundvar.getBoundingClientRect();
-      exp.appendChild(secondTermClone);
-      secondTermClone.style.opacity = "1";
-      secondTermClone.style.transform = "scale(0.01)";
-      secondTermClone.classList.remove("term-pulse-2");
+
+      // Boundvar needs to make room (or shrink, possibly) for the argument.
+      const box = document.createElement("span");
+      box.classList.add("term-box");
+      box.style.width = box.style.maxWidth = `${boundvarRect.width}px`;
+      boundvar.replaceWith(box);
+      box.appendChild(boundvar);
+      await wait(500); // Allow some time for animation stuff
+      // Grow the box to the size of the argument
+      box.style.width = box.style.maxWidth = `${argWidth}px`;
       await wait(1000);
+
+      // Initialize the argument clone
+      exp.appendChild(secondTermClone);
+      secondTermClone.style.transform = "scale(0.1)";
+      secondTermClone.classList.remove("term-pulse-2");
+      secondTermClone.style.transformOrigin = "top left";
+      secondTermClone.style.left = `${
+        fnBoundVar.getBoundingClientRect().left
+      }px`;
+      await wait(900);
+      secondTermClone.style.opacity = "1";
+      await wait(100);
+
+      // Move the argument clone out of the bound variable in the head
       secondTermClone.style.transform = "scale(1)";
-      secondTermClone.style.maxWidth = `${secondTermRect.width}px`;
-      secondTermClone.style.left = `${boundvarRect.left}px`;
+      secondTermClone.style.maxWidth = `${argWidth}px`;
+      secondTermClone.style.top = `${boundvarRect.top + 30}px`;
+      secondTermClone.style.opacity = "1";
+      box.style.opacity = "0"; // Start making the bound variable fade out
+      await wait(500);
+
+      // Move the argument clone into the target bound variable
+      secondTermClone.style.left = `${
+        boundvarRect.left - argWidth / 2 + boundvarRect.width / 2
+      }px`;
       secondTermClone.style.top = `${boundvarRect.top}px`;
+
+      await wait(1000);
+      secondTermClone.style.position = "static";
+      // secondTermClone.style.left
+      // secondTermClone.style.margin = "unset"; // Let it default back to the class's value
+      const termElement = document.createElement("span");
+      termElement.classList.add("term");
+      termElement.append(...Array.from(secondTermClone.children));
+      box.replaceWith(termElement);
       // boundvar.replaceWith(secondTermClone);
-      // Boundvar needs to make room (or shrink, possibly) for the argument
-      return;
+      // boundvar.replaceWith(secondTermClone);
+      // return;
     }
   }
 }
