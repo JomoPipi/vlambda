@@ -3,7 +3,14 @@ import { wait } from "./constants.js";
 import { createExpressionElement } from "./createExpressionElement.js";
 import { stripOuterParens } from "./stripOuterParens.js";
 
-const initialExp = "(λ a b . a b a) (λ a b . a) (λ a b . b)";
+// TODO: fix the jumpiness
+// TODO: simplify inner expressions
+// TODO: allow for toggles to show more details
+
+// const initialExp = "(λ a b . a b a) (λ a b . a) (λ a b . b)";
+// λ n f x . f (n f x)
+const initialExp = "(λ x . x x) (λ x . x x)";
+// const initialExp = "(λ n f x . f (n f x)) (λ f x . f (f x))";
 
 const expList = document.getElementById("expression-list") as HTMLDivElement;
 
@@ -47,6 +54,6 @@ async function run() {
       await run();
     }
 
-    // TODO: Reduce the inner expression
+    // TODO: Reduce inner expressions
   }
 }
