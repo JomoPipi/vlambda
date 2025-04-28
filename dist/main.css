@@ -16,7 +16,7 @@
 }
 @keyframes pulse {
   0% {
-    background-color: #000000;
+    background-color: rgba(0, 0, 0, 0);
     color: #ffffff;
   }
   50% {
@@ -24,13 +24,13 @@
     color: rgb(171, 255, 255);
   }
   100% {
-    background-color: #000000;
+    background-color: rgba(0, 0, 0, 0);
     color: #ffffff;
   }
 }
 @keyframes pulse-2 {
   0% {
-    background-color: #000000;
+    background-color: rgba(0, 0, 0, 0);
     border-color: transparent;
     color: #ffffff;
   }
@@ -40,7 +40,7 @@
     color: rgb(255, 171, 171);
   }
   100% {
-    background-color: #000000;
+    background-color: rgba(0, 0, 0, 0);
     border-color: transparent;
     color: #ffffff;
   }
@@ -100,7 +100,7 @@
     color: #ffffff;
   }
   to {
-    color: #000000;
+    color: rgba(0, 0, 0, 0);
   }
 }
 :root {
@@ -121,7 +121,7 @@
 }
 @keyframes pulse {
   0% {
-    background-color: #000000;
+    background-color: rgba(0, 0, 0, 0);
     color: #ffffff;
   }
   50% {
@@ -129,13 +129,13 @@
     color: rgb(171, 255, 255);
   }
   100% {
-    background-color: #000000;
+    background-color: rgba(0, 0, 0, 0);
     color: #ffffff;
   }
 }
 @keyframes pulse-2 {
   0% {
-    background-color: #000000;
+    background-color: rgba(0, 0, 0, 0);
     border-color: transparent;
     color: #ffffff;
   }
@@ -145,7 +145,7 @@
     color: rgb(255, 171, 171);
   }
   100% {
-    background-color: #000000;
+    background-color: rgba(0, 0, 0, 0);
     border-color: transparent;
     color: #ffffff;
   }
@@ -205,11 +205,11 @@
     color: #ffffff;
   }
   to {
-    color: #000000;
+    color: rgba(0, 0, 0, 0);
   }
 }
 body {
-  background-color: #000000;
+  background-color: black;
   color: #ffffff;
   margin: 0;
   padding: 0;
@@ -220,7 +220,6 @@ body {
 #expression-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
   text-align: center;
   margin-top: 10%;
 }
@@ -229,6 +228,8 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  transition: transform calc(var(--animation-speed) * 1s) ease-in-out;
+  padding: 5px;
 }
 
 .token {
@@ -394,6 +395,22 @@ body {
   box-sizing: border-box;
   border-left-width: 0px;
   border-right-width: 0px;
+}
+
+.l-paren, .r-paren {
+  color: rgb(255, 128, 128);
+}
+
+.lambda {
+  color: rgb(128, 192, 128);
+}
+
+.dot {
+  color: rgb(128, 128, 255);
+}
+
+.expression-shifted-up {
+  transform: translateY(-100%);
 }
 
 /*# sourceMappingURL=main.css.map */

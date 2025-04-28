@@ -28,8 +28,18 @@ async function run() {
     terms[0].children[1].classList.contains("lambda");
 
   if (nTerms >= 2 && firstTermIsAFunction) {
-    await applyLeftmostTermDirectlyToTheRight(exp);
-    await wait(500);
+    await wait(1000);
+    // const exp2 = exp // sticking to single-line reduction
+    // Enable multi-line reductions
+    const exp2 = exp.cloneNode(true) as HTMLElement;
+    exp2.classList.add("expression-shifted-up");
+    expList.appendChild(exp2);
+    await wait(100);
+    exp2.classList.remove("expression-shifted-up");
+    await wait(1000);
+
+    await applyLeftmostTermDirectlyToTheRight(exp2);
+    await wait(1000);
 
     // No need to parse the expression again, it's been rebuilt in HTML.
     // const nextExp = [...exp.children]
@@ -64,7 +74,7 @@ async function run() {
     }
 
     if (newExp) {
-      expList.replaceChildren(createExpressionElement(newExp));
+      expList.replaceChild(createExpressionElement(newExp), exp);
       await run();
       return;
     }
