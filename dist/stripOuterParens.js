@@ -7,8 +7,8 @@ export async function stripOuterParens(exp) {
         rParen.classList.contains("r-paren")) {
         lParen.classList.add("head-token-fade-out");
         rParen.classList.add("head-token-fade-out");
-        lParen.style.transform = "translateY(-20px)";
-        rParen.style.transform = "translateY(-20px)";
+        lParen.classList.add("faded-out");
+        rParen.classList.add("faded-out");
         await wait(1000);
         lParen.remove();
         rParen.remove();

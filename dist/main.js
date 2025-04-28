@@ -1,12 +1,12 @@
 import { applyLeftmostTermDirectlyToTheRight } from "./applyLeftmostTermDirectlyToTheRight.js";
 import { wait } from "./constants.js";
 import { createExpressionElement } from "./createExpressionElement.js";
-import { stripOuterParens } from "./stripOuterParens.js";
+import { stripOuterParens as animateStripOuterParens } from "./stripOuterParens.js";
 // TODO: fix the jumpiness
 // TODO: simplify inner expressions
 // TODO: allow for toggles to show more details
-// const initialExp = "(λ a b . a b a) (λ a b . a) (λ a b . b)";
-const initialExp = "(λ x . x x) (λ x . x x)";
+const initialExp = "(λ a b . a b a) (λ a b . a) (λ a b . b)";
+// const initialExp = "(λ x . x x)      (λ x . x x)";
 // const initialExp = "(λ n f x . f (n f x)) (λ f x . f (f x))";
 const expList = document.getElementById("expression-list");
 expList.appendChild(createExpressionElement(initialExp));
@@ -37,8 +37,11 @@ async function run() {
         if (nTerms !== 1) {
             throw "Unexpected stuff";
         }
-        const newExp = await stripOuterParens(exp);
+        const newExp = await animateStripOuterParens(exp);
         if (newExp) {
+            console.log("here");
+            console.log("3 sec wait");
+            await wait(1000);
             expList.replaceChildren(createExpressionElement(newExp));
             await run();
         }

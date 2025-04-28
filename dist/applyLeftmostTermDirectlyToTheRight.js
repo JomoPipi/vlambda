@@ -8,15 +8,19 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
     const boundvarsOfFirstTerm = getAllBoundVariableInstances(firstTerm);
     const argWidth = secondTermRect.width;
     const secondTermScaffold = document.createElement("span");
-    await flashFirstTwoTerms();
+    // await flashFirstTwoTerms();
     enableApplicationMarkers();
     const animatedSecondTermClone = duplicateSecondTerm();
     // Smoothy lift the second term clone while shrinking the hidden second term
     const fnBoundVarRect = fnBoundVar.getBoundingClientRect();
+    await wait(3000);
     await animateArgumentIntoBoundVariable();
+    await wait(3000);
     disableApplicationMarkers();
     colorSwirlBoundVars();
     await animateBoundVariableReplacements();
+    console.log("after animateBoundVariableReplacements");
+    await wait(3000);
     await reduceTheHead();
     async function flashFirstTwoTerms() {
         // Flash the first two terms to show the application `A B`
@@ -53,7 +57,8 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
         // from the clone directly
         secondTermClone.style.top = `${secondTermRect.top}px`;
         secondTermClone.style.left = `${secondTermRect.left}px`;
-        secondTermClone.style.margin = "0"; // Remove margins from clone to prevent
+        // Remove margins from clone to prevent double margin
+        secondTermClone.style.margin = "0em 0em 0em 0em";
         return secondTermClone;
     }
     async function animateArgumentIntoBoundVariable() {
@@ -80,7 +85,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
     }
     function collapseSpaceFromSecondTerm() {
         secondTermScaffold.style.width = secondTermScaffold.style.maxWidth = "0px";
-        secondTermScaffold.style.margin = "0em 0em";
+        secondTermScaffold.style.margin = "0em 0em 0em 0em";
     }
     function colorSwirlBoundVars() {
         boundvarsOfFirstTerm.forEach((el) => {
@@ -95,10 +100,13 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
             const box = document.createElement("span");
             box.classList.add("term-box");
             box.style.width = box.style.maxWidth = `${boundvarRect.width}px`;
+            console.log("before replaceWith");
             boundvar.replaceWith(box);
             box.appendChild(boundvar);
-            await wait(500); // Allow some time for animation stuff
+            console.log("before 3000 wait");
+            await wait(300000); // Allow some time for animation stuff
             // Grow the box to the size of the argument
+            console.log("after 3000 wait");
             box.style.width = box.style.maxWidth = `${argWidth}px`;
             await wait(500);
             // Initialize the argument clone
@@ -142,6 +150,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
         }
     }
     async function reduceTheHead() {
+        console.log("inside reduce the head");
         const indexOfDot = Array.from(firstTerm.children).findIndex((el) => el.classList.contains("dot"));
         const headTokenElements = [...firstTerm.children].slice(1, indexOfDot + 1);
         const nVars = headTokenElements.filter((el) => el.classList.contains("var")).length;
@@ -151,25 +160,31 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
         tokenElementsToRemove.forEach((el) => {
             el.classList.add("head-token-fade-out");
         });
-        await wait(10);
+        // Just enough time for the brower to catch up
+        await wait(100);
         tokenElementsToRemove.forEach((el) => {
             el.classList.add("faded-out");
         });
         await wait(2000);
+        console.log("after 2000 wait");
         const boxes = tokenElementsToRemove.map((tokenElement) => {
             const box = document.createElement("span");
             box.classList.add("term-box");
+            box.classList.add("green");
             box.style.width = box.style.maxWidth = `${tokenElement.getBoundingClientRect().width}px`;
+            box.style.margin = "0em 0em 0em 0.25em";
             tokenElement.replaceWith(box);
             return box;
         });
         await wait(1000);
+        console.log("after 1000 wait");
         // Shrink the boxes
         boxes.forEach((box) => {
             box.style.width = box.style.maxWidth = "0px";
-            box.style.margin = "0em 0em 0em 0.25em";
+            box.style.margin = "0em 0em 0em 0em";
         });
-        await wait(500);
+        await wait(2000);
+        console.log("after 2000 wait");
         boxes.forEach((box) => {
             box.remove();
         });
