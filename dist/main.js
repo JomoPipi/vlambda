@@ -1,12 +1,13 @@
 import { applyLeftmostTermDirectlyToTheRight } from "./applyLeftmostTermDirectlyToTheRight.js";
 import { wait } from "./constants.js";
 import { createExpressionElement } from "./createExpressionElement.js";
+import { getTerms } from "./getTerms.js";
 import { stripOuterParens as animateStripOuterParens } from "./stripOuterParens.js";
 // TODO: fix the jumpiness
 // TODO: simplify inner expressions
 // TODO: allow for toggles to show more details
 const initialExp = "(λ a b . a b a) (λ a b . a) (λ a b . b)";
-// const initialExp = "(λ b . (λ a b . a) b (λ a b . a)) (λ a b . b)";
+// const initialExp = " (λ b . (λ a b . b))  (λ a b . a)";
 // const initialExp = "(λ x . x x)      (λ x . x x)";
 // const initialExp = "(λ n f x . f (n f x)) (λ f x . f (f x))";
 const expList = document.getElementById("expression-list");
@@ -38,13 +39,24 @@ async function run() {
         if (nTerms !== 1) {
             throw "Unexpected stuff";
         }
-        const newExp = await animateStripOuterParens(exp);
-        if (newExp) {
-            console.log("here");
-            console.log("3 sec wait");
+        let newExp;
+        while (true) {
+            const nextNewExp = await animateStripOuterParens(exp);
             await wait(1000);
+            if (nextNewExp === false) {
+                break;
+            }
+            newExp = nextNewExp;
+            const terms = getTerms(nextNewExp);
+            if (terms.length !== 1) {
+                // It doesn't make sense to keep removing parentheses when there's more than one term.
+                break;
+            }
+        }
+        if (newExp) {
             expList.replaceChildren(createExpressionElement(newExp));
             await run();
+            return;
         }
         // TODO: Reduce inner expressions
     }

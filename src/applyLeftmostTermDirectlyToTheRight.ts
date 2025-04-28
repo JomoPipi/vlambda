@@ -115,25 +115,19 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
 
   async function animateBoundVariableReplacements() {
     for (const boundvar of boundvarsOfFirstTerm) {
-      console.log("start of loop");
       const secondTermClone = animatedSecondTermClone.cloneNode(
         true
       ) as HTMLElement;
       const boundvarRect = boundvar.getBoundingClientRect();
 
-      console.log("before replaceWith");
       // Boundvar needs to make room (or shrink, possibly) for the argument.
       const box = document.createElement("span");
       box.classList.add("term-box", "var");
       box.style.width = box.style.maxWidth = `${boundvarRect.width}px`;
       boundvar.replaceWith(box);
       box.appendChild(boundvar);
-      console.log("after replaceWith");
-      // await wait(5000);
-      // console.log("after 5000 wait");
       await wait(1000); // Allow some time for animation stuff
       // Grow the box to the size of the argument
-      console.log("after 3000 wait");
       box.style.width = box.style.maxWidth = `${argWidth}px`;
       await wait(500);
 
@@ -164,7 +158,6 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
       secondTermClone.style.top = `${boundvarRect.top}px`;
 
       await wait(1000);
-      console.log("after 1000 wait");
       // secondTermClone.style.position = "static";
       // const termElement = document.createElement("span");
       // termElement.classList.add("term");
@@ -189,7 +182,6 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
   }
 
   async function reduceTheHead() {
-    console.log("inside reduce the head");
     const indexOfDot = Array.from(firstTerm.children).findIndex((el) =>
       el.classList.contains("dot")
     );
@@ -212,12 +204,10 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
       el.classList.add("faded-out");
     });
     await wait(2000);
-    console.log("after 2000 wait");
     const boxes = tokenElementsToRemove.map((tokenElement) => {
       const box = document.createElement("span");
       const tokenType = tokenElement.getAttribute("data-token-type")!;
       box.classList.add(tokenType, "term-box");
-      console.log("box class =", box.className);
       // box.classList.add("green");
       box.style.width = box.style.maxWidth = `${
         tokenElement.getBoundingClientRect().width
@@ -228,9 +218,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
       tokenElement.replaceWith(box);
       return box;
     });
-    console.log("before boxes");
     await wait(1000);
-    console.log("after 1000 wait");
     // Shrink the boxes
     boxes.forEach((box) => {
       box.style.margin = "0em 0em 0em 0em";
@@ -240,9 +228,7 @@ export async function applyLeftmostTermDirectlyToTheRight(exp: HTMLElement) {
       // The third box is always representative of the dot in this case. The token to the right of the dot always has a margin-left of 0.25em. So we need to cancel that out.
       boxes[2].style.margin = "0em 0em 0em -0.25em";
     }
-    console.log("after boxes");
     await wait(2000);
-    console.log("after 2000 wait");
     boxes.forEach((box) => {
       box.remove();
     });
