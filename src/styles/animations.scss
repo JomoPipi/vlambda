@@ -1,0 +1,110 @@
+@import 'variables';
+
+// Animation for color gradient effect
+@keyframes color-swirl {
+  0% {
+    background-position: 0% 500%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+// Animation for pulsing effect
+@keyframes pulse {
+  0% {
+    background-color: $background-color;
+    color: $text-color;
+  }
+  50% {
+    background-color: #222;
+    color: $pulse-highlight-color;
+  }
+  100% {
+    background-color: $background-color;
+    color: $text-color;
+  }
+}
+
+// Alternative pulsing effect
+@keyframes pulse-2 {
+  0% {
+    background-color: $background-color;
+    border-color: transparent;
+    color: $text-color;
+  }
+  50% {
+    background-color: $pulse-2-bg-color;
+    border-color: $pulse-2-border-color;
+    color: $pulse-2-highlight-color;
+  }
+  100% {
+    background-color: $background-color;
+    border-color: transparent;
+    color: $text-color;
+  }
+}
+
+// Animation for wiggling effect
+@keyframes wiggle {
+  0% {
+    transform: rotate(0deg);
+    color: $text-color;
+  }
+  20% {
+    transform: rotate(-10deg);
+  }
+  40% {
+    transform: rotate(10deg);
+  }
+  50% {
+    color: $wiggle-highlight-color;
+  }
+  60% {
+    transform: rotate(-10deg);
+  }
+  80% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+    color: $text-color;
+  }
+}
+
+// Animation for shaking effect
+@keyframes shake {
+  0% {
+    transform: rotate(0deg) translateX(1px);
+    color: $shake-color-1;
+  }
+  20% {
+    transform: rotate(-10deg) translateX(-1px);
+  }
+  40% {
+    transform: rotate(10deg) translateX(1px);
+  }
+  50% {
+    color: $shake-color-2;
+  }
+  60% {
+    transform: rotate(-10deg) translateX(1px);
+  }
+  80% {
+    transform: rotate(10deg) translateX(0px);
+  }
+  100% {
+    transform: rotate(0deg);
+    color: $shake-color-1;
+  }
+}
+
+// Animation for rapid color flashing
+@keyframes spazz-out {
+  from {
+    color: $text-color;
+  }
+  to {
+    color: $background-color;
+  }
+} 

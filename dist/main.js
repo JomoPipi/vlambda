@@ -6,6 +6,7 @@ import { stripOuterParens as animateStripOuterParens } from "./stripOuterParens.
 // TODO: simplify inner expressions
 // TODO: allow for toggles to show more details
 const initialExp = "(λ a b . a b a) (λ a b . a) (λ a b . b)";
+// const initialExp = "(λ b . (λ a b . a) b (λ a b . a)) (λ a b . b)";
 // const initialExp = "(λ x . x x)      (λ x . x x)";
 // const initialExp = "(λ n f x . f (n f x)) (λ f x . f (f x))";
 const expList = document.getElementById("expression-list");

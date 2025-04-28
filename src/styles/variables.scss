@@ -1,0 +1,42 @@
+// Animation speed is defined as a CSS variable so it can be accessed and modified via JavaScript
+:root {
+  --animation-speed: 0.25;
+}
+
+// Animation durations
+$base-duration: 1s;
+$double-duration: 2s;
+$triple-duration: 3s;
+$pulse-duration: 0.8s;
+$shake-duration: 0.15s;
+$spazz-duration: 0.1s;
+
+// Colors
+$background-color: #000000;
+$text-color: #ffffff;
+$pulse-highlight-color: rgb(171, 255, 255);
+$pulse-2-bg-color: rgb(26, 17, 0);
+$pulse-2-border-color: rgba(255, 166, 0, 0.209);
+$pulse-2-highlight-color: rgb(255, 171, 171);
+$wiggle-highlight-color: orange;
+$shake-color-1: rgb(217, 141, 255);
+$shake-color-2: rgb(251, 155, 155);
+
+// Gradient colors for color-swirl
+$gradient-colors: (
+  #ff9696,
+  #ffd1ab,
+  #aeffae,
+  #a4ffff,
+  #ffa5ff,
+  #ff9696
+);
+
+// Spacing variables
+$spacing-base: 0.25em;
+$spacing-negative: -0.25em;
+$spacing-double: 0.5em;
+
+// Typography
+$font-size-base: 2em;
+$font-family: monospace; 

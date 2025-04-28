@@ -4,13 +4,15 @@
   "description": "TypeScript project",
   "main": "dist/main.js",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "tsc && sass src/styles/main.scss:dist/main.css",
+    "dev": "concurrently \"tsc --watch\" \"sass --watch src/styles/main.scss:dist/main.css\"",
     "start": "serve ."
   },
   "devDependencies": {
-    "typescript": "^5.3.3",
-    "serve": "^14.2.1"
+    "concurrently": "^8.2.2",
+    "sass": "^1.69.5",
+    "serve": "^14.2.1",
+    "typescript": "^5.3.3"
   },
   "type": "module"
 }

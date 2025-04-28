@@ -1,0 +1,155 @@
+@import 'variables';
+@import 'animations';
+
+// Basic elements
+body {
+  background-color: $background-color;
+  color: $text-color;
+  margin: 0;
+  padding: 0;
+  font-size: $font-size-base;
+  font-family: $font-family;
+}
+
+#expression-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+  margin-top: 10%;
+}
+
+// Expression elements
+.expression {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+// Token styling
+.token {
+  // border: 1px solid red;
+  display: inline-block;
+}
+
+
+.term-box {
+  display: inline-block;
+  opacity: 1;
+  transition: all calc(var(--animation-speed) * $base-duration) linear;
+}
+
+// Animation classes
+.term-clone {
+  position: absolute;
+  transform: scale(1);
+  transform-origin: left;
+  text-wrap: nowrap;
+  
+  transition: 
+    top calc(var(--animation-speed) * $base-duration) ease,
+    left calc(var(--animation-speed) * $base-duration) ease,
+    max-width calc(var(--animation-speed) * $base-duration) ease-out,
+    transform calc(var(--animation-speed) * $base-duration) ease-out;
+}
+
+.term-lift {
+  transform: translateY(-2em);
+  transition: transform calc(var(--animation-speed) * $double-duration) ease-out;
+}
+
+.term-pulse {
+  animation: pulse calc(var(--animation-speed) * $pulse-duration) ease-in-out infinite;
+}
+
+.term-pulse-2 {
+  animation: pulse-2 calc(var(--animation-speed) * $base-duration) ease-in-out infinite;
+}
+
+.bound-var-wiggle {
+  animation: wiggle calc(var(--animation-speed) * $double-duration) linear infinite;
+}
+
+.bound-var-shake {
+  animation: shake calc(var(--animation-speed) * $shake-duration) linear infinite;
+}
+
+// Fancy gradient effect
+.color-swirl {
+  background-image: linear-gradient(
+    45deg,
+    nth($gradient-colors, 1),
+    nth($gradient-colors, 2),
+    nth($gradient-colors, 3),
+    nth($gradient-colors, 4),
+    nth($gradient-colors, 5),
+    nth($gradient-colors, 6)
+  );
+  background-size: 500% 500%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  animation: color-swirl calc(var(--animation-speed) * $triple-duration) linear infinite;
+}
+
+// Animation for token removal
+.head-token-fade-out {
+  opacity: 1;
+  transform: translateY(0px);
+  animation: spazz-out calc(var(--animation-speed) * $spazz-duration) linear infinite;
+  transition: all calc(var(--animation-speed) * $base-duration) ease-out;
+  
+  &.faded-out {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+}
+
+// Spacing between lambda calculus tokens
+// Define all token types
+$tokens: "lambda", "var", "dot", "l-paren", "r-paren", "term-box";
+
+// Define combinations that DON'T need spacing when adjacent
+$no-spacing-pairs: (
+  "r-paren dot",
+  "lambda dot",
+  "lambda l-paren",
+  "dot dot",
+  "l-paren lambda",
+  "dot lambda",
+  "l-paren var",
+  "l-paren dot",
+  "var r-paren",
+  "l-paren l-paren",
+  "r-paren r-paren",
+
+  "term-box r-paren",
+);
+
+// Generate all combinations with spacing except those in the exclusion list
+@each $left in $tokens {
+  @each $right in $tokens {
+    $pair: "#{$left} #{$right}";
+    @if not index($no-spacing-pairs, $pair) {
+      .#{$left} + .#{$right} {
+        margin-left: $spacing-base;
+      }
+    }
+  }
+}
+
+
+// .term-box + .term-box {
+//   margin-left: 0;
+// }
+
+// Utility class
+.green {
+  border: 1px solid blue;
+  height: 20%;
+  border-top: 1px solid green;
+  box-sizing: border-box;
+  border-left-width: 0px;
+  border-right-width: 0px;
+} 

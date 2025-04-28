@@ -19,12 +19,14 @@ export function createExpressionElement(exp) {
         const tokens = tokenize(nTerms === 1 ? term : `(${term})`);
         for (const token of tokens) {
             const tokenElement = document.createElement("span");
+            const tokenType = tokenTypeClass(token);
             tokenElement.innerText = token;
             tokenElement.classList.add("token");
-            tokenElement.classList.add(tokenTypeClass(token));
+            tokenElement.classList.add(tokenType);
+            tokenElement.setAttribute("data-token-type", tokenType);
             termElement.appendChild(tokenElement);
         }
-        termElement.classList.add("term");
+        termElement.classList.add("term-box");
         return termElement;
     });
     expressionElement.append(...termElements);
