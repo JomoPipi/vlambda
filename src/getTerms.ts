@@ -3,7 +3,6 @@ import { stripUselessParentheses } from "./stripUselessParentheses.js";
 type Acc = [string[], number, number, number];
 export function getTerms(s: string): string[] {
   if (!s) {
-    console.log("s =", s);
     throw "why is s falsy";
   }
   return [...s]

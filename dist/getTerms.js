@@ -2,7 +2,6 @@ import { λ } from "./constants.js";
 import { stripUselessParentheses } from "./stripUselessParentheses.js";
 export function getTerms(s) {
     if (!s) {
-        console.log("s =", s);
         throw "why is s falsy";
     }
     return [...s]

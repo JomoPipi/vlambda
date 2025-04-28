@@ -6,7 +6,7 @@
     <title>Document</title>
     <style>
       :root {
-        --animation-speed: 2;
+        --animation-speed: 0.5;
       }
 
       body {
@@ -99,9 +99,14 @@
       }
 
       .head-token-fade-out {
-        opacity: 0;
-        transition: opacity calc(var(--animation-speed) * 1s) ease-out;
+        opacity: 1;
+        transform: translateY(0px);
         animation: spazz-out calc(var(--animation-speed) * 0.1s) linear infinite;
+        transition: all calc(var(--animation-speed) * 1s) ease-out;
+      }
+      .head-token-fade-out.faded-out {
+        opacity: 0;
+        transform: translateY(-15px);
       }
 
       .lambda + .var,

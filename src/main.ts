@@ -8,7 +8,6 @@ import { stripOuterParens } from "./stripOuterParens.js";
 // TODO: allow for toggles to show more details
 
 // const initialExp = "(λ a b . a b a) (λ a b . a) (λ a b . b)";
-// λ n f x . f (n f x)
 const initialExp = "(λ x . x x) (λ x . x x)";
 // const initialExp = "(λ n f x . f (n f x)) (λ f x . f (f x))";
 
@@ -26,7 +25,7 @@ async function run() {
   const nTerms = terms.length;
   const firstTermIsAFunction =
     terms[0].children[1].classList.contains("lambda");
-  console.log({ nTerms });
+
   if (nTerms >= 2 && firstTermIsAFunction) {
     await applyLeftmostTermDirectlyToTheRight(exp);
     await wait(500);

@@ -151,7 +151,11 @@ export async function applyLeftmostTermDirectlyToTheRight(exp) {
         tokenElementsToRemove.forEach((el) => {
             el.classList.add("head-token-fade-out");
         });
-        await wait(1000);
+        await wait(10);
+        tokenElementsToRemove.forEach((el) => {
+            el.classList.add("faded-out");
+        });
+        await wait(2000);
         const boxes = tokenElementsToRemove.map((tokenElement) => {
             const box = document.createElement("span");
             box.classList.add("term-box");
